@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 
+
 Route::get('/', function () {
     return Inertia::render('welcome', [
         'canRegister' => Features::enabled(Features::registration()),
@@ -15,5 +16,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 });
+
+Route::resource('posts', PostController::class);
+Route::post('/posts/{id}/comments', [CommentController::class, 'store']);
+Route::delete('/comments/{id}', [CommentController::class, 'destroy']);
+
 
 require __DIR__.'/settings.php';
