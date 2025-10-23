@@ -55,7 +55,7 @@ class PostController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $this->authorize('update', $post);
     }
 
     /**
@@ -65,6 +65,7 @@ class PostController extends Controller
     {
         $post = Post::findOrFail($id);
 
+        $this->authorize('update', $post);
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -81,6 +82,9 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $this->authorize('update', $post);
+        
+        $post->delete();
+        return redirect('/posts');
     }
 }
