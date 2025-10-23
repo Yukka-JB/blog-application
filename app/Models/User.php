@@ -36,6 +36,11 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *
@@ -49,4 +54,6 @@ class User extends Authenticatable
             'two_factor_confirmed_at' => 'datetime',
         ];
     }
+
+
 }
