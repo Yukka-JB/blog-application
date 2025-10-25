@@ -2,22 +2,25 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import '../css/app.css'; // Tailwind CSS
 
-function App() {
-  return (
-    <div className="min-h-screen bg-background flex items-center justify-center">
-      {/* Use the primary foreground so text contrasts the primary background */}
-      <div className="bg-primary text-primary-foreground p-6 rounded">
-        Tailwind Test
-      </div>
-    </div>
-  );
-}
+// Ensure Flowbite JS runtime is available (enables interactive Flowbite components)
+import 'flowbite';
 
-const root = document.getElementById('app');
-if (root) {
-  ReactDOM.createRoot(root).render(
+// Import Flowbite CSS so Flowbite component classes are styled.
+// This ensures Flowbite styles are bundled by Vite.
+import 'flowbite/dist/flowbite.css';
+
+// Lazy mount the AuthApp if the root element exists
+async function mountAuth() {
+  const el = document.getElementById('react-auth');
+  if (!el) return;
+
+  // dynamic import so other pages don't load the component
+  const { default: AuthApp } = await import('./pages/auth/AuthApp');
+  ReactDOM.createRoot(el).render(
     <React.StrictMode>
-      <App />
+      <AuthApp />
     </React.StrictMode>
   );
 }
+
+mountAuth();

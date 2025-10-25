@@ -4,11 +4,14 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\AuthController;
 
-
-
-Route::view('/', 'welcome')->name('welcome');
-Route::view('/register', 'auth.register')->name('register');
+Route::get('/', [AuthController::class, 'show'])->name('home');
+Route::post('/register', [AuthController::class, 'register'])->name('register');
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+// Route::view('/', 'welcome')->name('welcome');
+// Route::view('/register', 'auth.register')->name('register');
 
 
 // Route::get('/', function () {
