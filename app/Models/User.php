@@ -11,7 +11,6 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    // Ensure these fields are fillable for create() usage
     protected $fillable = [
         'name',
         'email',

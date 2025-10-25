@@ -1,34 +1,23 @@
-/* --------------------------------------------------------
-   Professional Tailwind + Flowbite design system
-   for forms and auth views (registration, login, etc.)
---------------------------------------------------------- */
-
-/* Light theme (default) */
 :root {
-    /* Surfaces & text */
+
     --background: #f7f9fc;
     --foreground: #0e1320;
   
     --card: #ffffff;
     --card-foreground: #0e1320;
   
-    /* Primary actions */
-    --primary: #2563eb;             /* modern blue-600 */
+    --primary: #2563eb;
     --primary-foreground: #ffffff;
   
-    /* Secondary / neutral */
     --secondary: #6b7280;
     --secondary-foreground: #374151;
   
-    /* Accent / highlights */
-    --accent: #f97316;              /* orange-500 accent */
+    --accent: #f97316;
     --accent-foreground: #0e1320;
   
-    /* Destructive */
     --destructive: #ef4444;
     --destructive-foreground: #ffffff;
   
-    /* Borders / radii */
     --border: #e5e7eb;
     --radius-md: 0.5rem;
     --radius-lg: 0.75rem;
@@ -38,7 +27,6 @@
     --shadow-hover: 0 4px 12px rgba(15, 23, 42, 0.12);
   }
   
-  /* Dark theme */
   .dark {
     --background: #0b1120;
     --foreground: #e5e7eb;
@@ -63,16 +51,12 @@
     --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.25);
   }
   
-  /* Tailwind core */
   @tailwind base;
   @tailwind components;
   @tailwind utilities;
   
   @import "flowbite/dist/flowbite.css";
   
-  /* --------------------------------------------------------
-     Base styles
-  --------------------------------------------------------- */
   @layer base {
     html, body {
       background-color: var(--background);
@@ -91,7 +75,6 @@
       font-size: 0.875rem;
     }
   
-    /* Input & form field styling */
     input[type="text"], input[type="email"], input[type="password"],
     textarea, select {
       background-color: var(--card);
@@ -116,7 +99,6 @@
       color: rgba(230, 238, 248, var(--muted-opacity));
     }
   
-    /* Buttons */
     .btn {
       border-radius: var(--radius-md);
       font-weight: 600;
@@ -130,7 +112,7 @@
       box-shadow: var(--shadow-soft);
     }
     .btn-primary:hover {
-      background-color: #1d4ed8; /* blue-700 */
+      background-color: #1d4ed8;
       box-shadow: var(--shadow-hover);
       transform: translateY(-1px);
     }
@@ -144,7 +126,7 @@
       background-color: rgba(107, 114, 128, 0.08);
     }
   
-    /* Card styling */
+
     .card {
       background-color: var(--card);
       color: var(--card-foreground);
@@ -157,23 +139,21 @@
       box-shadow: var(--shadow-hover);
     }
   
-    /* Form container helpers */
+
     .form-wrapper {
       max-width: 420px;
       margin: 4rem auto;
       padding: 2rem;
     }
   
-    /* Checkbox accent color */
+
     input[type="checkbox"] { accent-color: var(--primary); }
   
-    /* Alerts & badges */
+
     .alert, .badge { color: var(--card-foreground); }
   }
   
-  /* --------------------------------------------------------
-     Utility layer for semantic variables
-  --------------------------------------------------------- */
+
   @layer utilities {
     .bg-background { background-color: var(--background); }
     .text-foreground { color: var(--foreground); }

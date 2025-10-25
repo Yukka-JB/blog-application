@@ -6,7 +6,6 @@ module.exports = (function () {
         './resources/views/**/*.blade.php',
         './resources/js/**/*.{ts,tsx,js,jsx}',
   
-        // Flowbite content paths - ensure Tailwind scans Flowbite sources
         './node_modules/flowbite-react/**/*.js',
         './node_modules/flowbite/**/*.js',
       ],
@@ -35,10 +34,9 @@ module.exports = (function () {
         },
       },
       plugins: [
-        // Flowbite plugin
+
         require('flowbite/plugin'),
   
-        // your custom color->utilities plugin
         plugin(function ({ addUtilities, theme, e }) {
           const colors = theme('colors') || {};
           const utilities = {};

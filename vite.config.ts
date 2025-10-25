@@ -24,7 +24,7 @@ export default defineConfig({
     }),
     tailwindcss(),
   ],
-  // Let esbuild handle JSX -> automatic runtime (no React plugin preamble)
+
   esbuild: {
     jsx: 'automatic',
   },

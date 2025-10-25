@@ -4,16 +4,29 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
-
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class PostController extends Controller
 {
+    // Ensure authorize() is available on this controller
+    use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
+     *
+     * Shows the authenticated user's posts. If no user is authenticated,
+     * shows all posts (public view).
      */
     public function index()
     {
-        return Post::all();
+        if (auth()->check()) {
+            $posts = Post::where('user_id', auth()->id())->latest()->get();
+        } else {
+            $posts = Post::latest()->get();
+        }
+
+        // Render a Blade view that lists posts (resources/views/posts.blade.php)
+        return view('posts', compact('posts'));
     }
 
     /**
@@ -21,7 +34,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        // Show a simple create form (resources/views/posts/create.blade.php)
+        return view('posts.create');
     }
 
     /**
@@ -47,17 +61,24 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $post = Post::findOrFail($id);
+
+        return view('posts.show', compact('post'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
+        $post = Post::findOrFail($id);
+
+        // Authorize the current user can update this post.
         $this->authorize('update', $post);
+
+        return view('posts.edit', compact('post'));
     }
 
     /**
@@ -76,17 +97,19 @@ class PostController extends Controller
 
         $post->update($validated);
 
-        return redirect("/posts/{$post->id}")->with('success', 'Post updated successfully.');
+        return redirect(route('posts.show', $post->id))->with('success', 'Post updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
+        $post = Post::findOrFail($id);
+
         $this->authorize('update', $post);
-        
+
         $post->delete();
-        return redirect('/posts');
+        return redirect('/posts')->with('success', 'Post deleted.');
     }
 }

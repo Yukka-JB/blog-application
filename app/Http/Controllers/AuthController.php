@@ -5,17 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use App\Models\User;
 
 class AuthController extends Controller
 {
-    // Show the auth page
     public function show()
     {
         return view('auth.index');
     }
 
-    // Register a new user
     public function register(Request $request)
     {
         $data = $request->validate([
@@ -32,10 +31,9 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect()->intended('/')->with('success', 'Welcome — your account has been created.');
+        return redirect()->intended(route('posts.index'))->with('success', 'Welcome — your account has been created.');
     }
 
-    // Login existing user
     public function login(Request $request)
     {
         $creds = $request->validate([
@@ -45,17 +43,33 @@ class AuthController extends Controller
 
         $remember = $request->boolean('remember');
 
-        if (Auth::attempt($creds, $remember)) {
-            $request->session()->regenerate();
-            return redirect()->intended('/')->with('success', 'Welcome back.');
+        Log::info('Login attempt', ['email' => $creds['email'], 'ip' => $request->ip()]);
+
+        $user = User::where('email', $creds['email'])->first();
+        if (! $user) {
+            Log::warning('Login failed: user not found', ['email' => $creds['email']]);
+            return redirect()->route('home')
+                ->withErrors(['email' => 'No account found for that email.'])
+                ->withInput($request->only('email'));
         }
 
-        return back()
+        $passwordMatches = Hash::check($creds['password'], $user->password);
+        Log::debug('Password check result', ['email' => $creds['email'], 'matches' => $passwordMatches]);
+
+        if (Auth::attempt(['email' => $creds['email'], 'password' => $creds['password']], $remember)) {
+            $request->session()->regenerate();
+
+            Log::info('Login successful', ['email' => $creds['email'], 'user_id' => Auth::id()]);
+            return redirect()->intended(route('posts.index'))->with('success', 'Welcome back.');
+        }
+
+        Log::warning('Login failed: attempt returned false', ['email' => $creds['email']]);
+
+        return redirect()->route('home')
             ->withErrors(['email' => 'The provided credentials do not match our records.'])
-            ->onlyInput('email');
+            ->withInput($request->only('email'));
     }
 
-    // Logout
     public function logout(Request $request)
     {
         Auth::logout();

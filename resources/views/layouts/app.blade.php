@@ -7,13 +7,6 @@
   <meta name="description" content="@yield('description', 'A neat Laravel + React + Tailwind app')" />
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
-  @if (app()->environment('local'))
-    @vite(['resources/js/app.tsx', 'resources/css/app.css'])
-  @else
-    <link rel="stylesheet" href="{{ mix('resources/css/app.css') }}">
-    <script src="{{ mix('resources/js/app.js') }}" defer></script>
-  @endif
-
   <script>
     (function () {
       try {
@@ -25,9 +18,17 @@
         } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
           document.documentElement.classList.add('dark');
         }
-      } catch (e) { /* ignore */ }
+      } catch (e) {
+      }
     })();
   </script>
+
+  @if (app()->environment('local'))
+    @vite(['resources/js/app.tsx', 'resources/css/app.css'])
+  @else
+    <link rel="stylesheet" href="{{ mix('resources/css/app.css') }}">
+    <script src="{{ mix('resources/js/app.js') }}" defer></script>
+  @endif
 </head>
 <body class="min-h-screen bg-background selection:bg-primary selection:text-primary-foreground">
   <a href="#main" class="sr-only focus:not-sr-only focus:absolute top-4 left-4 z-50 px-3 py-2 rounded bg-primary text-primary-foreground">Skip to content</a>
@@ -35,17 +36,14 @@
   <header class="w-full border-b border-border bg-card/80 backdrop-blur-sm">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
-        {{-- Left: intentionally left empty (brand removed) --}}
         <div class="flex-1"></div>
 
-        {{-- Center navigation --}}
         <nav class="hidden md:flex items-center gap-6">
           <a href="{{ url('/') }}" class="text-sm text-card-foreground hover:text-primary">{{ __('Home') }}</a>
           <a href="#" class="text-sm text-secondary-foreground hover:text-primary">{{ __('Docs') }}</a>
           <a href="#" class="text-sm text-secondary-foreground hover:text-primary">{{ __('About') }}</a>
         </nav>
 
-        {{-- Right: auth / theme --}}
         <div class="flex items-center gap-3">
           @auth
             <span class="text-sm text-secondary-foreground hidden sm:inline">Hi, {{ Auth::user()->name }}</span>
@@ -71,7 +69,6 @@
 
   <main id="main" class="py-10">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      {{-- Flash messages --}}
       @if(session('success'))
         <div class="mb-6">
           <div class="rounded-md p-4 bg-primary text-primary-foreground">
@@ -88,14 +85,11 @@
         </div>
       @endif
 
-      {{-- Page content --}}
       <div class="prose prose-invert max-w-none">
         @yield('body')
       </div>
     </div>
   </main>
-
-  {{-- Footer removed as requested --}}
 
   <script>
     (function () {

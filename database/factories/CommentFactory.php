@@ -3,12 +3,15 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Comment;
+use App\Models\Post;
+use App\Models\User;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Comment>
- */
+
 class CommentFactory extends Factory
 {
+    protected $model = Comment::class;
+
     /**
      * Define the model's default state.
      *
@@ -16,10 +19,25 @@ class CommentFactory extends Factory
      */
     public function definition(): array
     {
+        $text = $this->faker->sentences(2, true);
+
         return [
-            'user_id' => \App\Models\User::factory(),
-            'post_id' => \App\Models\Post::factory(),
-            'comment' => fake()->sentence(12),
-          ];
+
+            'user_id' => User::factory(),
+            'post_id' => Post::factory(),
+            'comment' => $text,
+            'content' => $text,
+            'author_name' => null,
+        ];
+    }
+
+    public function guest(): self
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'user_id' => null,
+                'author_name' => $this->faker->name(),
+            ];
+        });
     }
 }

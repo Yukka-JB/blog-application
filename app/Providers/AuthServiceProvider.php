@@ -11,24 +11,20 @@ use App\Policies\CommentPolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {
+
     protected $policies = [
-        \App\Models\Post::class => \App\Policies\PostPolicy::class,
-        \App\Models\Comment::class => \App\Policies\CommentPolicy::class,
+        Post::class => PostPolicy::class,
+        Comment::class => CommentPolicy::class,
     ];
-    
-    /**
-     * Register services.
-     */
+
     public function register(): void
     {
         //
     }
 
-    /**
-     * Bootstrap services.
-     */
     public function boot(): void
     {
         $this->registerPolicies();
+
     }
 }

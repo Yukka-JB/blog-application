@@ -3,6 +3,11 @@ import { Button, Checkbox, Label, TextInput, Alert } from 'flowbite-react';
 
 function useCsrfToken() {
   return useMemo(() => {
+    const fromWindow = (window as any).__CSRF;
+    if (typeof fromWindow === 'string' && fromWindow.length > 0) {
+      return fromWindow;
+    }
+
     const meta = document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement | null;
     return meta?.getAttribute('content') ?? '';
   }, []);
@@ -18,7 +23,6 @@ export default function AuthApp() {
     <div className="min-h-screen flex items-center justify-center bg-background py-12 px-4">
       <div className="w-full max-w-4xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Register */}
           <div className="rounded-lg shadow-lg overflow-hidden bg-card">
             <div className="p-8">
               <h2 className="text-2xl font-semibold text-card-foreground mb-6">Create an account</h2>
@@ -94,7 +98,6 @@ export default function AuthApp() {
             </div>
           </div>
 
-          {/* Login */}
           <div className="rounded-lg shadow-lg overflow-hidden bg-card">
             <div className="p-8">
               <h2 className="text-2xl font-semibold text-card-foreground mb-6">Sign in</h2>
@@ -104,39 +107,17 @@ export default function AuthApp() {
 
                 <div>
                   <Label htmlFor="login-email" className="text-card-foreground/80 mb-1">Email</Label>
-                  <TextInput
-                    id="login-email"
-                    name="email"
-                    type="email"
-                    value={login.email}
-                    onChange={(e) => setLogin({ ...login, email: e.target.value })}
-                    required
-                    placeholder="name@example.com"
-                    className="input input-bordered w-full bg-background text-card-foreground"
-                  />
+                  <TextInput id="login-email" name="email" type="email" value={login.email} onChange={(e) => setLogin({ ...login, email: e.target.value })} required placeholder="name@example.com" className="input input-bordered w-full bg-background text-card-foreground" />
                 </div>
 
                 <div>
                   <Label htmlFor="login-password" className="text-card-foreground/80 mb-1">Password</Label>
-                  <TextInput
-                    id="login-password"
-                    name="password"
-                    type="password"
-                    value={login.password}
-                    onChange={(e) => setLogin({ ...login, password: e.target.value })}
-                    required
-                    placeholder="••••••••"
-                    className="input input-bordered w-full bg-background text-card-foreground"
-                  />
+                  <TextInput id="login-password" name="password" type="password" value={login.password} onChange={(e) => setLogin({ ...login, password: e.target.value })} required placeholder="••••••••" className="input input-bordered w-full bg-background text-card-foreground" />
                 </div>
 
                 <div className="flex items-center justify-between">
                   <label className="flex items-center gap-2">
-                    <Checkbox
-                      name="remember"
-                      checked={login.remember}
-                      onChange={(e) => setLogin({ ...login, remember: (e.target as HTMLInputElement).checked })}
-                    />
+                    <Checkbox name="remember" checked={login.remember} onChange={(e) => setLogin({ ...login, remember: (e.target as HTMLInputElement).checked })} />
                     <span className="text-card-foreground/80 ml-2">Remember me</span>
                   </label>
                   <a href="#" className="text-primary-foreground">Forgot?</a>
@@ -146,8 +127,6 @@ export default function AuthApp() {
                   <Button color="primary" type="submit" className="w-full btn-primary">Sign in</Button>
                 </div>
               </form>
-
-              {/* Social sign-in removed per request */}
 
               {Array.isArray(flash.errors) && flash.errors.length > 0 && (
                 <div className="mt-4 text-red-400 text-sm">
