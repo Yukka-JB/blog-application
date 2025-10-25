@@ -1,12 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laravel React Tailwind</title>
-    @vite(['resources/js/app.tsx', 'resources/css/app.css'])
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>@yield('title', config('app.name', 'Laravel'))</title>
+
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+
+  @if (app()->environment('local'))
+    @vite('resources/css/app.css')
+  @else
+    <link rel="stylesheet" href="{{ mix('resources/css/app.css') }}">
+  @endif
 </head>
-<body class="bg-background text-foreground min-h-screen">
-    <div id="app"></div>
+<body class="min-h-screen bg-background antialiased">
+  @yield('body')
 </body>
 </html>
